@@ -52,7 +52,7 @@ class prices:
             data = {
                 "ticker": ticker,
                 "open": price,
-                "price": price,
+                "price:": price,
                 "change": 0,
                 "movement": 0,
                 "priceDate": price_date
@@ -62,7 +62,7 @@ class prices:
             data = {
                 "ticker": ticker,
                 "open": resval['open'],
-                "price": price,
+                "price:": price,
                 "change": change,
                 "movement": pricesBusiness.calc_movement(change, price),
                 "priceDate": price_date
