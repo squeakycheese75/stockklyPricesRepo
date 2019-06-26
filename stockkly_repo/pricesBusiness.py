@@ -2,8 +2,12 @@ import datetime
 
 
 def calc_movement(change, price):
-    return (change / price) * 100
+    if change == 0:
+        return 0
+    if price == 0:
+        return 0
+    return (float(change) / float(price)) * 100
 
 
 def calc_change(price, open):
-    return (price - open)
+    return (float(price) - float(open))
