@@ -50,7 +50,7 @@ class prices:
             {'ticker': ticker.upper(), 'priceDate': price_date})
         if resval is None:
             data = {
-                "ticker": ticker,
+                "ticker": ticker.upper(),
                 "open": price,
                 "price": price,
                 "change": 0,
@@ -59,8 +59,9 @@ class prices:
             }
         else:
             change = pricesBusiness.calc_change(price, resval['open'])
+            # print("change is " + str(change))
             data = {
-                "ticker": ticker,
+                "ticker": ticker.upper(),
                 "open": resval['open'],
                 "price": price,
                 "change": change,
