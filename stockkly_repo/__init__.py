@@ -45,6 +45,13 @@ class prices:
 
         return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
 
+    def upsert_price_and_change(self, ticker, price, change):
+        price_date = datetime.datetime.strptime(
+            str(datetime.datetime.now().date()), "%Y-%m-%d")
+        data = self.build_data(ticker, price, price_date)
+        data["change"] = change
+        return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
+
     def build_data(self, ticker, price, price_date):
         resval = self.collection.find_one(
             {'ticker': ticker.upper(), 'priceDate': price_date})
