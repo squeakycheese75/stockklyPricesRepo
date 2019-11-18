@@ -37,6 +37,15 @@ class prices:
 
         return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
 
+    def upsert_price_with_date(self, ticker, price, price_date):
+
+        # price_date = datetime.datetime.strptime(
+        #     str(datetime.datetime.now().date()), "%Y-%m-%d")
+
+        data = self.build_data(ticker, price, price_date)
+
+        return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
+
     def upsert_price_with_data(self, ticker, data):
         # if data is None:
             # data = build_data(ticker, price, price_date)
@@ -45,11 +54,11 @@ class prices:
 
         return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
 
-    def upsert_price_and_change(self, ticker, price, change):
+    def upsert_price_and_change(self, ticker, price, change, open):
         price_date = datetime.datetime.strptime(
             str(datetime.datetime.now().date()), "%Y-%m-%d")
-        data = self.build_data(ticker, price, price_date)
-        data["change"] = change
+        data = self.build_data_with_precalc(
+            ticker, price, price_date, change, open)
         return self.collection.update_one({'ticker': ticker.upper(), 'priceDate': price_date}, {"$set": data}, upsert=True)
 
     def build_data(self, ticker, price, price_date):
@@ -70,6 +79,29 @@ class prices:
             data = {
                 "ticker": ticker.upper(),
                 "open": resval['open'],
+                "price": price,
+                "change": change,
+                "movement": pricesBusiness.calc_movement(change, price),
+                "priceDate": price_date
+            }
+        return data
+
+    def build_data_with_precalc(self, ticker, price, price_date, change, open):
+        resval = self.collection.find_one(
+            {'ticker': ticker.upper(), 'priceDate': price_date})
+        if resval is None:
+            data = {
+                "ticker": ticker.upper(),
+                "open": price,
+                "price": price,
+                "change": 0,
+                "movement": 0,
+                "priceDate": price_date
+            }
+        else:
+            data = {
+                "ticker": ticker.upper(),
+                "open": open,
                 "price": price,
                 "change": change,
                 "movement": pricesBusiness.calc_movement(change, price),

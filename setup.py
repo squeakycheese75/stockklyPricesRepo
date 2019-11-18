@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="stockkly_repo",
-    version="0.1.5",
+    version="0.1.9",
     author="Jamie Wooltorton",
     author_email="james_wooltorton@hotmail.com",
     description="The Stockkly repository",
